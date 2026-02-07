@@ -1,4 +1,5 @@
 // Week 1 Logic: UI Switching Only (No API)
+//Al Mamun 1245
 
 // Function to switch between Login and Signup tabs
 function switchTab(tabName) {
@@ -28,4 +29,5 @@ function switchTab(tabName) {
 function tempLogin() {
     console.log("Login button clicked - Waiting for backend integration...");
     alert("This is a static prototype. Backend connection coming in Week 2!");
+
 }
