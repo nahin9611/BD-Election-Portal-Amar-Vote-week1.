@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BD Election Site (Prototype)</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <header>
+        <div class="logo-area">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/84/Government_Seal_of_Bangladesh.svg/1200px-Government_Seal_of_Bangladesh.svg.png" alt="BD Logo" width="50">
+            <h1>Bangladesh Digital Election</h1>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="auth-box">
+            <div class="tabs">
+                <button id="tab-login" class="active" onclick="switchTab('login')">Login</button>
+                <button id="tab-signup" onclick="switchTab('signup')">Register</button>
+            </div>
+
+            <form id="login-form" class="form-section active">
+                <h3>Voter Login</h3>
+                <input type="text" placeholder="Enter Voter ID" required>
+                <input type="password" placeholder="Enter PIN" required>
+                <button type="button" onclick="tempLogin()">Login</button> 
+            </form>
+
+            <form id="signup-form" class="form-section hidden">
+                <h3>New Voter Registration</h3>
+                <input type="text" placeholder="Full Name" required>
+                <input type="text" placeholder="Voter ID (10 digits)" required>
+                <input type="password" placeholder="Create PIN" required>
+                <button type="button" onclick="alert('Backend not connected yet!')">Register</button>
+            </form>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2024 Election Commission Prototype. All rights reserved.</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
