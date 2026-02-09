@@ -11,9 +11,9 @@ This week focused on building a responsive, accessible, and secure-looking User 
 - **Update 04:** Built the Ballot Submission engine and session reset flow.
 
 ## 👥 Team Contributions
-- **Developer A:** Core UI Architecture & Validation Logic 
-- **Developer B:** Voter Portal UI & Asset Management 
-- **Developer C:** Admin Dashboard & Real-time Visualization 
+- **Nahin 1401:** Core UI Architecture & Validation Logic 
+- **Anik  1243:** Voter Portal UI & Asset Management 
+- **Mamun 1245:** Admin Dashboard & Real-time Visualization 
 
 ## 🚀 Installation
 1. Clone the repository.
