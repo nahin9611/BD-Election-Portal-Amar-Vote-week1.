@@ -28,3 +28,37 @@ body {
     max-width: 450px;
 }
 
+
+
+
+
+/* 02: Voting Grid & Component Layout */
+/* BALLOT STRUCTURE.....1401 nahin */
+.symbol-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.option-card {
+    cursor: pointer;
+    text-align: center;
+}
+
+.option-card input { display: none; }
+
+.card-content {
+    border: 2px solid #ddd;
+    border-radius: 10px;
+    padding: 15px;
+    transition: 0.3s;
+}
+
+.option-card input:checked + .card-content {
+    border-color: var(--primary-color);
+    background: #e6f4f1;
+    font-weight: bold;
+}
+
+
