@@ -1,17 +1,59 @@
-<!-- The Gov Seal logo, the NID/PIN input fields, and the tab switching buttons are also included here -->
-<div class="legacy-blur-overlay"></div>
-<section id="page-auth" class="active-section">
-    <div class="glass-card">
-        <div class="gov-header">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/8/84/Government_Seal_of_Bangladesh.svg" class="gov-logo">
-            <h1>Digital Voting Service</h1>
-            <p>Election Commission of NR⚡</p>
-        </div>
-        <div class="auth-tabs">
-            <button id="tab-login" class="tab-link active">LOGIN</button>
-            <button id="tab-signup" class="tab-link">SIGN UP</button>
-        </div>
-        </div>
-</section>
-<!-- Written in CodePen, so the body will be added later -->
+<!-- This is the official login and signup form for users -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>National E-Voting Portal | Election Commission</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="legacy-blur-overlay"></div>
 
+    <main id="main-app">
+        <section id="page-auth" class="active-section">
+            <div class="glass-card">
+                <div class="gov-header">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/8/84/Government_Seal_of_Bangladesh.svg" alt="BD Gov Logo" class="gov-logo" width="80">
+                    <h1>Digital Voting Service</h1>
+                    <p>Election Commission of NR⚡</p>
+                </div>
+                
+                <div class="auth-tabs">
+                    <button id="tab-login" class="tab-link active" onclick="switchTab('login')">LOGIN</button>
+                    <button id="tab-signup" class="tab-link" onclick="switchTab('signup')">SIGN UP</button>
+                </div>
+
+                <form id="loginForm" class="auth-form">
+                    <div class="input-field">
+                        <label>National ID (NID)</label>
+                        <input type="text" id="loginId" placeholder="Enter 8-digit NID" required maxlength="8">
+                    </div>
+                    <div class="input-field">
+                        <label>Secure PIN</label>
+                        <input type="password" id="loginPin" placeholder="Enter 4-digit PIN" required maxlength="4">
+                    </div>
+                    <button type="button" onclick="login()" class="btn-action">VALIDATE & ENTER</button>
+                </form>
+
+                <form id="signupForm" class="auth-form hidden">
+                    <div class="input-field">
+                        <label>Full Name</label>
+                        <input type="text" id="regName" placeholder="As per NID card">
+                    </div>
+                    <div class="input-field">
+                        <label>NID Number</label>
+                        <input type="text" id="regId" placeholder="8-digit number">
+                    </div>
+                    <div class="input-field">
+                        <label>Create PIN</label>
+                        <input type="password" id="regPin" placeholder="4-digit PIN">
+                    </div>
+                    <button type="button" onclick="register()" class="btn-success">CREATE DIGITAL IDENTITY</button>
+                </form>
+            </div>
+        </section>
+    </main>
+    <script src="script.js"></script>
+</body>
+</html>
