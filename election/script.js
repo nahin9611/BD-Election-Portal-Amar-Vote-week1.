@@ -31,3 +31,23 @@ function login() {
 }
 
 
+
+// 04: Ballot Submission Logic
+//Finalize the "Cast Vote" logic to ensure the user selected everything. by nahin 1401
+function castVote() {
+    const selectedSymbol = document.querySelector('input[name="symbol"]:checked');
+    const selectedRef = document.querySelector('input[name="referendum"]:checked');
+
+    if (!selectedSymbol || !selectedRef) {
+        alert("⚠️ Error: Please complete all sections of the ballot.");
+        return;
+    }
+
+    alert(`🗳️ Success!\nCandidate: ${selectedSymbol.value}\nPolicy: ${selectedRef.value}\nThank you for voting.`);
+    
+    // Auto-reload to simulate session end
+    setTimeout(() => { location.reload(); }, 2000);
+}
+
+
+
