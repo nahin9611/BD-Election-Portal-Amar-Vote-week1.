@@ -86,3 +86,59 @@ app.post('/api/login', async (req, res) => {
         res.status(500).json({ success: false });
     }
 });
+
+
+
+
+// 08: Voting Transaction & Results Aggregation
+//Implement the vote recording and the Admin results calculation
+// VOTE API: Securely records the ballot
+app.post('/api/vote', async (req, res) => {
+    const { nid, symbol, referendum } = req.body;
+    
+    // Security Check: Find voter and verify they haven't voted
+    const voter = await Voter.findOne({ nid });
+    
+    if (voter.hasVoted) {
+        return res.json({ success: false, message: "Fraud Alert: You have already voted!" });
+    }
+
+    // Lock the vote
+    voter.voteChoice = symbol;
+    voter.referendumChoice = referendum;
+    voter.hasVoted = true; // Crucial: Prevents double voting
+    await voter.save();
+
+    res.json({ success: true });
+});
+
+// ADMIN RESULTS API: Calculates totals for the Dashboard
+app.get('/api/admin/results', async (req, res) => {
+    try {
+        // Count votes per Symbol
+        const symbolCounts = await Voter.aggregate([
+            { $match: { hasVoted: true } },
+            { $group: { _id: "$voteChoice", count: { $sum: 1 } } }
+        ]);
+
+        // Count votes for Referendum
+        const refCounts = await Voter.aggregate([
+            { $match: { hasVoted: true } },
+            { $group: { _id: "$referendumChoice", count: { $sum: 1 } } }
+        ]);
+        
+        // Get Total Stats
+        const totalVoters = await Voter.countDocuments();
+        const totalCast = await Voter.countDocuments({ hasVoted: true });
+
+        res.json({ 
+            success: true, 
+            symbolCounts, 
+            refCounts,
+            totalVoters,
+            totalCast
+        });
+    } catch (err) {
+        res.status(500).json({ success: false });
+    }
+});
