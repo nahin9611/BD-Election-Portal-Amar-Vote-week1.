@@ -44,3 +44,45 @@ const voterSchema = new mongoose.Schema({
 });
 
 const Voter = mongoose.model('Voter', voterSchema);
+
+
+// 07: Authentication API Routes
+//Create the "Gatekeeper" routes that handle Login and Registration.
+// REGISTER API: Creates a new voter
+app.post('/api/signup', async (req, res) => {
+    try {
+        const { name, nid, pin } = req.body;
+        // Check if NID already exists
+        const existingUser = await Voter.findOne({ nid });
+        if (existingUser) {
+            return res.json({ success: false, message: "NID already registered!" });
+        }
+        
+        const newVoter = new Voter({ name, nid, pin });
+        await newVoter.save();
+        res.json({ success: true, message: "Registration Successful!" });
+    } catch (error) {
+        res.status(500).json({ success: false, error: error.message });
+    }
+});
+
+// LOGIN API: Verifies credentials
+app.post('/api/login', async (req, res) => {
+    try {
+        const { nid, pin } = req.body;
+        const voter = await Voter.findOne({ nid, pin });
+        
+        if (voter) {
+            // Return success + their previous voting status
+            res.json({ 
+                success: true, 
+                hasVoted: voter.hasVoted,
+                name: voter.name 
+            });
+        } else {
+            res.json({ success: false, message: "Invalid NID or PIN" });
+        }
+    } catch (error) {
+        res.status(500).json({ success: false });
+    }
+});
