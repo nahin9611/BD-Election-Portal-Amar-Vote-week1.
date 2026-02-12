@@ -24,3 +24,23 @@ app.listen(PORT, HOST, () => {
     📡 Network Access: http://[YOUR_PC_IP]:${PORT}
     `);
 });
+
+
+// 06: Database Connection & Schema Design
+//Connect to MongoDB and define the "Voter" structure
+// Connect to Local MongoDB Database
+mongoose.connect('mongodb://127.0.0.1:27017/nationalElectionDB')
+    .then(() => console.log("💎 DATABASE CONNECTED: Secure & Ready"))
+    .catch(err => console.error("🛑 DB CONNECTION ERROR:", err));
+
+// Define the Voter Model (The Blueprint)
+const voterSchema = new mongoose.Schema({
+    name: String,
+    nid: { type: String, unique: true, required: true }, // NID must be unique
+    pin: { type: String, required: true },
+    hasVoted: { type: Boolean, default: false }, // Tracks voting status
+    voteChoice: { type: String, default: null }, // Stores the Symbol choice
+    referendumChoice: { type: String, default: null } // Stores Yes/No choice
+});
+
+const Voter = mongoose.model('Voter', voterSchema);
