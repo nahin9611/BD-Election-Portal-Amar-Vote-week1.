@@ -42,6 +42,34 @@
         console.error("Chart Error:", err); 
     }
 }
+
+    if (data.success) {
+    // Update Symbol Chart
+    const sCtx = document.getElementById('symbolChart').getContext('2d');
+    if (sChart) sChart.destroy();
+    sChart = new Chart(sCtx, {
+        type: 'bar',
+        data: {
+            labels: data.symbolCounts.map(i => i._id),
+            datasets: [{ label: 'Votes', data: data.symbolCounts.map(i => i.count), backgroundColor: '#006a4e' }]
+        }
+    });
+
+    // Update Referendum Chart
+    const rCtx = document.getElementById('refChart').getContext('2d');
+    if (rChart) rChart.destroy();
+    rChart = new Chart(rCtx, {
+        type: 'pie',
+        data: {
+            labels: data.referendumCounts.map(i => i._id),
+            datasets: [{ data: data.referendumCounts.map(i => i.count), backgroundColor: ['#28a745', '#f42a41'] }]
+        }
+    });
+}
+// Trigger interval for live updates
+setInterval(loadResults, 5000);
+loadResults();
+    
 </script>
 
 
