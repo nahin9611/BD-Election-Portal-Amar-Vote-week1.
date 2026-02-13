@@ -23,3 +23,61 @@ function switchTab(type) {
     document.getElementById('tab-login').classList.toggle('active', isLogin);
     document.getElementById('tab-signup').classList.toggle('active', !isLogin);
 }
+
+
+// --- 2. AUTHENTICATION (Matching Lead's Week 3 Backend) ---
+//Integrate Authentication logic with NID verification and fraud alerts
+// Handle Signup
+document.getElementById('signupForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const payload = {
+        name: document.getElementById('regName').value,
+        voterId: document.getElementById('regId').value,
+        pin: document.getElementById('regPin').value
+    };
+    try {
+        const response = await fetch('/api/signup', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        });
+        const data = await response.json();
+        if (data.success) {
+            alert("✅ Registration Successful!");
+            switchTab('login');
+        } else {
+            alert("❌ NID Already Registered.");
+        }
+    } catch (err) {
+        alert("⚠️ Server connection error.");
+    }
+});
+
+// Handle Login with Double-Voting Protection
+document.getElementById('loginForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const payload = {
+        voterId: document.getElementById('loginId').value,
+        pin: document.getElementById('loginPin').value
+    };
+    try {
+        const response = await fetch('/api/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        });
+        const data = await response.json();
+        if (data.success) {
+            if (data.voter.hasVoted) {
+                alert("🚫 FRAUD ALERT: This NID has already cast a vote.");
+            } else {
+                voterSession = data.voter;
+                showSection('page-welcome');
+            }
+        } else {
+            alert("❌ Invalid NID or PIN.");
+        }
+    } catch (err) {
+        alert("⚠️ Secure server connection failed.");
+    }
+});
