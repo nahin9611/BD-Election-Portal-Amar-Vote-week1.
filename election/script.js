@@ -81,3 +81,36 @@ document.getElementById('loginForm').addEventListener('submit', async (e) => {
         alert("⚠️ Secure server connection failed.");
     }
 });
+
+
+
+
+// --- 3. VOTING FLOW ---
+//Implement dual-ballot selection logic and dynamic receipt mapping
+document.getElementById('agreeCheck').addEventListener('change', function() {
+    document.getElementById('startVoteBtn').disabled = !this.checked;
+});
+
+document.getElementById('startVoteBtn').onclick = () => showSection('page-ballot');
+
+function selectSymbol(element, name) {
+    currentVote.symbol = name;
+    document.querySelectorAll('.symbol-card').forEach(card => card.classList.remove('selected'));
+    element.classList.add('selected');
+    
+    const nextBtn = document.getElementById('nextToRefBtn');
+    nextBtn.classList.remove('hidden');
+    nextBtn.onclick = () => showSection('page-referendum');
+}
+
+function castReferendum(choice) {
+    currentVote.referendum = choice;
+    
+    // Map data to Verification Screen (Crucial for User Trust)
+    document.getElementById('resName').innerText = voterSession.name;
+    document.getElementById('resId').innerText = voterSession.voterId;
+    document.getElementById('resSymbol').innerText = currentVote.symbol;
+    document.getElementById('resRef').innerText = currentVote.referendum;
+    
+    showSection('page-confirm');
+}
