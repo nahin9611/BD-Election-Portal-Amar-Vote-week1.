@@ -55,5 +55,31 @@
         </section>
     </main>
     <script src="script.js"></script>
+
+<!-- Add the mandatory "Voter Agreement" screen that appears after login. -->
+    <section id="page-welcome" class="hidden">
+    <div class="glass-card wide">
+        <h2>Voter Information & Terms</h2>
+        <div class="terms-scroll">
+            <h3>Official Voting Protocols:</h3>
+            <p>1. Every citizen is entitled to one secure vote tied to their NID.</p>
+            <p>2. Attempting to vote multiple times is a violation of Election Law.</p>
+            <p>3. Your selections are end-to-end encrypted.</p>
+            <hr>
+            <h3>Referendum Overview:</h3>
+            <p>You will vote on: <strong>Constitutional Amendment 2026</strong></p>
+        </div>
+        
+        <div class="agreement-box">
+            <label class="custom-checkbox">
+                <input type="checkbox" id="agreeCheck" onchange="toggleStartButton()">
+                <span class="box"></span>
+                I confirm that I am the authorized holder of this NID.
+            </label>
+            <button id="startVoteBtn" class="btn-action" disabled onclick="startVoting()">PROCEED TO BALLOT</button>
+        </div>
+    </div>
+</section>
 </body>
 </html>
+
