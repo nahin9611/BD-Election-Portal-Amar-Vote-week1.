@@ -28,7 +28,22 @@
 <script>
     let sChart = null, rChart = null;
     // Basic setup complete
+// Implement async data fetching logic from Backend API
+    async function loadResults() {
+    try {
+        const response = await fetch('http://192.168.0.106:3000/api/admin/results');
+        const data = await response.json();
+        
+        if (data.success) {
+            console.log("Data received:", data);
+            // Visualization logic to follow in next update
+        }
+    } catch (err) { 
+        console.error("Chart Error:", err); 
+    }
+}
 </script>
+
 
     
 </body>
