@@ -79,7 +79,35 @@
             <button id="startVoteBtn" class="btn-action" disabled onclick="startVoting()">PROCEED TO BALLOT</button>
         </div>
     </div>
+<!-- This is the core interface where the user picks their candidate. -->
+        <section id="page-ballot" class="hidden">
+    <div class="glass-card wide">
+        <div class="header-ballot">
+            <h3>Ballot Phase 1: Parliamentary Election</h3>
+            <p>Select ONE symbol to cast your vote.</p>
+        </div>
+        
+        <div class="symbol-grid">
+            <div class="symbol-card" onclick="selectSymbol(this, 'Nouka')"><div class="symbol-img">⛵</div><span>Nouka</span></div>
+            <div class="symbol-card" onclick="selectSymbol(this, 'Sheaf')"><div class="symbol-img">🌾</div><span>Sheaf</span></div>
+            <div class="symbol-card" onclick="selectSymbol(this, 'Plough')"><div class="symbol-img">🚜</div><span>Plough</span></div>
+            <div class="symbol-card" onclick="selectSymbol(this, 'Rose')"><div class="symbol-img">🌹</div><span>Rose</span></div>
+            
+            <div class="symbol-card" onclick="selectSymbol(this, 'Clock')"><div class="symbol-img">🕰️</div><span>Clock</span></div>
+            <div class="symbol-card" onclick="selectSymbol(this, 'Football')"><div class="symbol-img">⚽</div><span>Football</span></div>
+            <div class="symbol-card" onclick="selectSymbol(this, 'Pineapple')"><div class="symbol-img">🍍</div><span>Pineapple</span></div>
+            <div class="symbol-card" onclick="selectSymbol(this, 'Chair')"><div class="symbol-img">🪑</div><span>Chair</span></div>
+
+            <div class="symbol-card" onclick="selectSymbol(this, 'Candle')"><div class="symbol-img">🕯️</div><span>Candle</span></div>
+            <div class="symbol-card" onclick="selectSymbol(this, 'Rickshaw')"><div class="symbol-img">🚲</div><span>Rickshaw</span></div>
+            <div class="symbol-card" onclick="selectSymbol(this, 'Tiger')"><div class="symbol-img">🐅</div><span>Tiger</span></div>
+            <div class="symbol-card" onclick="selectSymbol(this, 'Kite')"><div class="symbol-img">🪁</div><span>Kite</span></div>
+        </div>
+
+        <button id="nextToRefBtn" class="btn-action hidden" onclick="goToReferendum()">CONTINUE TO REFERENDUM</button>
+    </div>
 </section>
 </body>
 </html>
+
 
