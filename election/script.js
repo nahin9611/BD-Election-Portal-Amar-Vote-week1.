@@ -114,3 +114,38 @@ function castReferendum(choice) {
     
     showSection('page-confirm');
 }
+
+// --- 4. FINAL ENCRYPTION & SUBMISSION ---
+
+document.getElementById('finalSubmitBtn').onclick = async () => {
+    // Show loading state on button
+    const btn = document.getElementById('finalSubmitBtn');
+    btn.innerText = "SUBMITTING SECURELY...";
+    btn.disabled = true;
+
+    const payload = {
+        voterId: voterSession.voterId,
+        symbol: currentVote.symbol,
+        referendum: currentVote.referendum
+    };
+
+    try {
+        const response = await fetch('/api/vote', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        });
+        const data = await response.json();
+
+        if (data.success) {
+            // Show the premium success overlay
+            document.getElementById('successOverlay').classList.remove('hidden');
+        } else {
+            alert("❌ Error: Vote could not be recorded. Redirecting...");
+            location.reload();
+        }
+    } catch (err) {
+        alert("⚠️ Network Failure. Your vote was not saved.");
+        location.reload();
+    }
+};
