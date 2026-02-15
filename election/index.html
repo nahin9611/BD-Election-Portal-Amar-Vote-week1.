@@ -106,8 +106,42 @@
 
         <button id="nextToRefBtn" class="btn-action hidden" onclick="goToReferendum()">CONTINUE TO REFERENDUM</button>
     </div>
+            <section id="page-referendum" class="hidden">
+    <div class="glass-card">
+        <h3>Ballot Phase 2: National Referendum</h3>
+        <p class="ref-question">Do you support the proposed constitutional reform?</p>
+        
+        <div class="ref-buttons">
+            <button class="choice-btn yes" onclick="selectRef('YES')">YES (হ্যাঁ)</button>
+            <button class="choice-btn no" onclick="selectRef('NO')">NO (না)</button>
+        </div>
+    </div>
+</section>
+
+<section id="page-confirm" class="hidden">
+    <div class="glass-card wide">
+        <h2>Confirm Your Vote</h2>
+        <div class="receipt-box">
+            <p><strong>Candidate Choice:</strong> <span id="resSymbol">---</span></p>
+            <p><strong>Referendum Choice:</strong> <span id="resRef">---</span></p>
+        </div>
+        <div class="btn-group">
+            <button id="finalSubmitBtn" class="btn-success" onclick="submitVote()">CONFIRM & CAST</button>
+            <button class="btn-danger" onclick="location.reload()">CANCEL</button>
+        </div>
+    </div>
+</section>
+
+<div id="successOverlay" class="overlay hidden">
+    <div class="success-content">
+        <div class="success-icon">✓</div>
+        <h2>Vote Recorded!</h2>
+        <button onclick="location.reload()" class="btn-action">EXIT</button>
+    </div>
+</div>
 </section>
 </body>
 </html>
+
 
 
