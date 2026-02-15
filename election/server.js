@@ -1,144 +1,75 @@
-// 05: Server Initialization & Configuration by nahin 1401
-//Initialize the backend environment and create the main server file
 const express = require('express');
 const mongoose = require('mongoose');
 const path = require('path');
-const cors = require('cors'); // Required for cross-device access later
+const cors = require('cors');
 
 const app = express();
-
-// Middleware: Allows the server to understand JSON and serve HTML files
 app.use(express.json());
-app.use(cors()); 
-app.use(express.static('public')); // Serves files from 'public' folder
+app.use(cors());
 
-const PORT = 3000;
-const HOST = '0.0.0.0'; // Critical for Mobile Access (Week 3 prep)
-
-// Start the Server
-app.listen(PORT, HOST, () => {
-    console.log(`
-    🚀 ELECTION SERVER ONLINE
-    --------------------------
-    💻 Local Access: http://localhost:${PORT}
-    📡 Network Access: http://[YOUR_PC_IP]:${PORT}
-    `);
-});
-
-
-// 06: Database Connection & Schema Design
-//Connect to MongoDB and define the "Voter" structure
-// Connect to Local MongoDB Database
+// 1. DATABASE CONNECTION
 mongoose.connect('mongodb://127.0.0.1:27017/nationalElectionDB')
-    .then(() => console.log("💎 DATABASE CONNECTED: Secure & Ready"))
-    .catch(err => console.error("🛑 DB CONNECTION ERROR:", err));
+    .then(() => console.log("💎 SECURE: Database Connected"))
+    .catch(err => console.error("🛑 Connection Error:", err));
 
-// Define the Voter Model (The Blueprint)
-const voterSchema = new mongoose.Schema({
+// 2. SCHEMA
+const Voter = mongoose.model('Voter', new mongoose.Schema({
     name: String,
-    nid: { type: String, unique: true, required: true }, // NID must be unique
-    pin: { type: String, required: true },
-    hasVoted: { type: Boolean, default: false }, // Tracks voting status
-    voteChoice: { type: String, default: null }, // Stores the Symbol choice
-    referendumChoice: { type: String, default: null } // Stores Yes/No choice
-});
+    voterId: { type: String, unique: true },
+    pin: String,
+    hasVoted: { type: Boolean, default: false },
+    votedSymbol: { type: String, default: null },
+    referendumVote: { type: String, default: null }
+}));
 
-const Voter = mongoose.model('Voter', voterSchema);
+// 3. API ROUTES (Data Engine)
 
-
-// 07: Authentication API Routes
-//Create the "Gatekeeper" routes that handle Login and Registration.
-// REGISTER API: Creates a new voter
-app.post('/api/signup', async (req, res) => {
-    try {
-        const { name, nid, pin } = req.body;
-        // Check if NID already exists
-        const existingUser = await Voter.findOne({ nid });
-        if (existingUser) {
-            return res.json({ success: false, message: "NID already registered!" });
-        }
-        
-        const newVoter = new Voter({ name, nid, pin });
-        await newVoter.save();
-        res.json({ success: true, message: "Registration Successful!" });
-    } catch (error) {
-        res.status(500).json({ success: false, error: error.message });
-    }
-});
-
-// LOGIN API: Verifies credentials
-app.post('/api/login', async (req, res) => {
-    try {
-        const { nid, pin } = req.body;
-        const voter = await Voter.findOne({ nid, pin });
-        
-        if (voter) {
-            // Return success + their previous voting status
-            res.json({ 
-                success: true, 
-                hasVoted: voter.hasVoted,
-                name: voter.name 
-            });
-        } else {
-            res.json({ success: false, message: "Invalid NID or PIN" });
-        }
-    } catch (error) {
-        res.status(500).json({ success: false });
-    }
-});
-
-
-
-
-// 08: Voting Transaction & Results Aggregation
-//Implement the vote recording and the Admin results calculation
-// VOTE API: Securely records the ballot
-app.post('/api/vote', async (req, res) => {
-    const { nid, symbol, referendum } = req.body;
-    
-    // Security Check: Find voter and verify they haven't voted
-    const voter = await Voter.findOne({ nid });
-    
-    if (voter.hasVoted) {
-        return res.json({ success: false, message: "Fraud Alert: You have already voted!" });
-    }
-
-    // Lock the vote
-    voter.voteChoice = symbol;
-    voter.referendumChoice = referendum;
-    voter.hasVoted = true; // Crucial: Prevents double voting
-    await voter.save();
-
-    res.json({ success: true });
-});
-
-// ADMIN RESULTS API: Calculates totals for the Dashboard
+// Results API for Charts
 app.get('/api/admin/results', async (req, res) => {
     try {
-        // Count votes per Symbol
         const symbolCounts = await Voter.aggregate([
             { $match: { hasVoted: true } },
-            { $group: { _id: "$voteChoice", count: { $sum: 1 } } }
+            { $group: { _id: "$votedSymbol", count: { $sum: 1 } } }
         ]);
-
-        // Count votes for Referendum
-        const refCounts = await Voter.aggregate([
+        const referendumCounts = await Voter.aggregate([
             { $match: { hasVoted: true } },
-            { $group: { _id: "$referendumChoice", count: { $sum: 1 } } }
+            { $group: { _id: "$referendumVote", count: { $sum: 1 } } }
         ]);
-        
-        // Get Total Stats
-        const totalVoters = await Voter.countDocuments();
-        const totalCast = await Voter.countDocuments({ hasVoted: true });
-
-        res.json({ 
-            success: true, 
-            symbolCounts, 
-            refCounts,
-            totalVoters,
-            totalCast
-        });
+        res.json({ success: true, symbolCounts, referendumCounts });
     } catch (err) {
         res.status(500).json({ success: false });
     }
+});
+
+// Auth & Voting APIs
+app.post('/api/signup', async (req, res) => {
+    try { const v = new Voter(req.body); await v.save(); res.json({success:true}); }
+    catch(e) { res.status(400).json({success:false}); }
+});
+
+app.post('/api/login', async (req, res) => {
+    const v = await Voter.findOne({ voterId: req.body.voterId, pin: req.body.pin });
+    res.json({ success: !!v, voter: v });
+});
+
+app.post('/api/vote', async (req, res) => {
+    const { voterId, symbol, referendum } = req.body;
+    await Voter.findOneAndUpdate({ voterId }, { hasVoted: true, votedSymbol: symbol, referendumVote: referendum });
+    res.json({ success: true });
+});
+
+// 4. SERVING FILES
+// ... (Your previous code above)
+
+// 4. SERVING FILES
+app.use(express.static('public'));
+
+const PORT = 3000;
+// We add '0.0.0.0' so your iPhone can "see" the PC
+app.listen(PORT, '0.0.0.0', () => {
+    console.log(`
+    ✅ SERVER ACTIVE
+    💻 On PC: http://localhost:${PORT}
+    📱 On iPhone: http://192.168.0.106:${PORT}/admin.html
+    `);
 });
