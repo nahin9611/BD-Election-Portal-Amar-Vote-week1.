@@ -1,64 +1,27 @@
-/* 01: Project Configuration & Variables by 1401 nahin */
 :root {
-    --primary-color: #006a4e; /* Bangladesh Green */
-    --accent-red: #f42a41;
-    --glass-bg: rgba(255, 255, 255, 0.9);
-    --shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+    --primary-green: #006a4e; /* Bangladesh Flag Green */
+    --national-red: #f42a41;  /* Bangladesh Flag Red */
+    --accent-gold: #d4af37;
+    --glass-bg: rgba(255, 255, 255, 0.88);
+    --glass-border: rgba(255, 255, 255, 0.3);
+    --shadow-premium: 0 20px 40px rgba(0, 0, 0, 0.25);
+    --transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
 }
 
-* { box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', 'SolaimanLipi', Roboto, sans-serif;
+}
 
 body {
-    background: linear-gradient(135deg, #e0e0e0 0%, #ffffff 100%);
     min-height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
-    margin: 0;
+    overflow-x: hidden;
+    /* This will be the base background before the blur overlay */
+    background: url('https://images.unsplash.com/photo-1583258521509-2166a987d3e6?auto=format&fit=crop&q=80&w=2000') no-repeat center center fixed;
+    background-size: cover;
 }
-
-.glass-card {
-    background: var(--glass-bg);
-    backdrop-filter: blur(10px);
-    border-radius: 15px;
-    padding: 2rem;
-    box-shadow: var(--shadow);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    width: 100%;
-    max-width: 450px;
-}
-
-
-
-
-
-/* 02: Voting Grid & Component Layout */
-/* BALLOT STRUCTURE.....1401 nahin */
-.symbol-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 15px;
-    margin-top: 20px;
-}
-
-.option-card {
-    cursor: pointer;
-    text-align: center;
-}
-
-.option-card input { display: none; }
-
-.card-content {
-    border: 2px solid #ddd;
-    border-radius: 10px;
-    padding: 15px;
-    transition: 0.3s;
-}
-
-.option-card input:checked + .card-content {
-    border-color: var(--primary-color);
-    background: #e6f4f1;
-    font-weight: bold;
-}
-
-
