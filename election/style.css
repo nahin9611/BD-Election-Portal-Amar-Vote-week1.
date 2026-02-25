@@ -25,3 +25,36 @@ body {
     background: url('https://images.unsplash.com/photo-1583258521509-2166a987d3e6?auto=format&fit=crop&q=80&w=2000') no-repeat center center fixed;
     background-size: cover;
 }
+/* --- THE BEAUTY: LEGACY BLUR OVERLAY --- */
+.legacy-blur-overlay {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    /* Darkening gradient to make text pop while keeping the PM/Heritage images visible in blur */
+    background: radial-gradient(circle, rgba(0, 106, 78, 0.15) 0%, rgba(0, 0, 0, 0.75) 100%);
+    backdrop-filter: blur(12px); /* High-end professional blur */
+    z-index: -1;
+}
+
+/* --- CONTAINER ALIGNMENT --- */
+.glass-card {
+    background: var(--glass-bg);
+    backdrop-filter: blur(8px);
+    border: 1px solid var(--glass-border);
+    border-radius: 28px;
+    padding: 40px;
+    box-shadow: var(--shadow-premium);
+    width: 90%;
+    max-width: 550px;
+    text-align: center;
+    animation: fadeInSlide 0.8s ease-out;
+}
+
+.glass-card.wide {
+    max-width: 900px;
+}
+
+@keyframes fadeInSlide {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
