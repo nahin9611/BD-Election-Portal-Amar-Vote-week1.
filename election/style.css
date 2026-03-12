@@ -147,5 +147,31 @@ body {
     font-size: 40px;
     margin-bottom: 10px;
 }
+/* --- REFERENDUM YES/NO BUTTONS --- */
+.ref-buttons {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    margin-top: 30px;
+}
+
+.choice-btn {
+    padding: 20px 50px;
+    font-size: 20px;
+    font-weight: 800;
+    border: none;
+    border-radius: 100px;
+    color: white;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.choice-btn.yes { background: #28a745; box-shadow: 0 8px 15px rgba(40,167,69,0.3); }
+.choice-btn.no { background: var(--national-red); box-shadow: 0 8px 15px rgba(244,42,65,0.3); }
+
+.choice-btn:hover {
+    transform: scale(1.1);
+    filter: brightness(1.1);
+}
 
 
