@@ -174,4 +174,86 @@ body {
     filter: brightness(1.1);
 }
 
+/* --- FORMS & INPUTS --- */
+.input-field {
+    text-align: left;
+    margin-bottom: 15px;
+}
+
+.input-field label {
+    display: block;
+    margin-bottom: 5px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #444;
+}
+
+input {
+    width: 100%;
+    padding: 14px;
+    border: 1.5px solid #ddd;
+    border-radius: 12px;
+    outline: none;
+    transition: var(--transition);
+}
+
+input:focus {
+    border-color: var(--primary-green);
+    box-shadow: 0 0 0 4px rgba(0, 106, 78, 0.1);
+}
+
+.btn-action {
+    width: 100%;
+    padding: 16px;
+    background: var(--primary-green);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.btn-action:hover:not(:disabled) {
+    background: #004d39;
+    box-shadow: 0 5px 15px rgba(0,106,78,0.3);
+}
+
+.btn-action:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+}
+
+/* --- UTILITIES --- */
+.hidden { display: none !important; }
+
+/* Custom Checkbox Alignment */
+.agreement-box {
+    margin-top: 20px;
+    text-align: left;
+}
+
+.custom-checkbox {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+
+
+/* Mobile Responsive Admin Dashboard */
+@media screen and (max-width: 768px) {
+    .dashboard {
+        flex-direction: column; /* Stacks charts vertically on phone */
+        padding: 10px;
+        gap: 20px;
+    }
+    .chart-box {
+        width: 100%; /* Charts take full width on phone */
+        min-height: 300px;
+    }
+}
 
