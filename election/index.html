@@ -1,151 +1,250 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <!-- Character encoding -->
     <meta charset="UTF-8">
+
+    <!-- Responsive design for mobile devices -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Page title -->
     <title>National E-Voting Portal | Election Commission of Bangladesh</title>
+
+    <!-- External CSS file -->
     <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
+    <!-- Background blur overlay for visual effect -->
     <div class="legacy-blur-overlay"></div>
 
+    <!-- Main Application Container -->
     <main id="main-app">
 
+        <!-- ================= AUTHENTICATION PAGE ================= -->
         <section id="page-auth" class="active-section">
             <div class="glass-card">
+
+                <!-- Government Header Section -->
                 <div class="gov-header">
                     <div class="logo-container">
+                        <!-- Bangladesh Government Logo -->
                         <img src="https://upload.wikimedia.org/wikipedia/commons/8/84/Government_Seal_of_Bangladesh.svg" alt="BD Gov Logo" class="gov-logo">
                     </div>
                     <h1>Digital Voting Service</h1>
                     <p>Election Commission of NR⚡</p>
                 </div>
                 
+                <!-- Tabs for Login and Signup -->
                 <div class="auth-tabs">
+                    <!-- Login Tab Button -->
                     <button id="tab-login" class="tab-link active" onclick="switchTab('login')">LOGIN</button>
+
+                    <!-- Signup Tab Button -->
                     <button id="tab-signup" class="tab-link" onclick="switchTab('signup')">SIGN UP</button>
                 </div>
 
+                <!-- ================= LOGIN FORM ================= -->
                 <form id="loginForm" class="auth-form">
+
+                    <!-- NID Input -->
                     <div class="input-field">
                         <label>National ID (NID)</label>
                         <input type="text" id="loginId" placeholder="Enter 8-digit NID" required maxlength="8">
                     </div>
+
+                    <!-- PIN Input -->
                     <div class="input-field">
                         <label>Secure PIN</label>
                         <input type="password" id="loginPin" placeholder="Enter 4-digit PIN" required maxlength="4">
                     </div>
+
+                    <!-- Login Button -->
                     <button type="submit" class="btn-action">VALIDATE & ENTER</button>
                 </form>
 
+                <!-- ================= SIGNUP FORM ================= -->
                 <form id="signupForm" class="auth-form hidden">
+
+                    <!-- Full Name Input -->
                     <div class="input-field">
                         <label>Full Name (English)</label>
                         <input type="text" id="regName" placeholder="As per NID card" required>
                     </div>
+
+                    <!-- NID Registration Input -->
                     <div class="input-field">
                         <label>Assign NID Number</label>
                         <input type="text" id="regId" placeholder="8-digit number" required maxlength="8">
                     </div>
+
+                    <!-- PIN Setup Input -->
                     <div class="input-field">
                         <label>Set Secure PIN</label>
                         <input type="password" id="regPin" placeholder="4-digit number" required maxlength="4">
                     </div>
+
+                    <!-- Signup Button -->
                     <button type="submit" class="btn-success">CREATE DIGITAL IDENTITY</button>
                 </form>
             </div>
         </section>
 
+        <!-- ================= ELECTION SELECTION PAGE (NEW) ================= -->
+        <section id="page-election-type" class="hidden">
+            <div class="glass-card">
+                <h2>Select Election Module</h2>
+                <p>Please choose which election you are participating in today.</p>
+                
+                <div class="election-options" style="display: flex; flex-direction: column; gap: 15px; margin-top: 25px;">
+                    <!-- National Election Button -->
+                    <button class="btn-action" onclick="setElectionType('national')">
+                        🇧🇩 National Election (Parliament & Referendum)
+                    </button>
+                    
+                    <!-- Chairman Election Button -->
+                    <button class="btn-chairman" onclick="setElectionType('chairman')" style="background: linear-gradient(135deg, #e67e22, #d35400); color: white; border: none; padding: 15px; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer; box-shadow: 0 4px 15px rgba(230, 126, 34, 0.3);">
+                        🏘️ Local Chairman Election (Candidates Only)
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= WELCOME & TERMS PAGE ================= -->
         <section id="page-welcome" class="hidden">
             <div class="glass-card wide">
+
+                <!-- Title -->
                 <h2>Voter Information & Terms</h2>
+
+                <!-- Scrollable Terms Content -->
                 <div class="terms-scroll">
+
+                    <!-- Voting Rules -->
                     <h3>Official Voting Protocols:</h3>
                     <p>1. Every citizen is entitled to one secure vote tied to their NID.</p>
                     <p>2. Attempting to vote multiple times is a violation of Election Law.</p>
                     <p>3. Your selections are end-to-end encrypted.</p>
+
                     <hr>
+
+                    <!-- Referendum Explanation -->
                     <h3>Referendum (গণভোট) Overview:</h3>
                     <p>A "Yes/No" vote allows you to decide on critical national matters such as:</p>
+
+                    <!-- Referendum Topics -->
                     <ul>
                         <li>📜 Constitutional Amendments (Article modification)</li>
                         <li>⚖️ Major National Law changes</li>
                         <li>🏛️ Restructuring Government Systems</li>
                     </ul>
                 </div>
+
+                <!-- Agreement Checkbox -->
                 <div class="agreement-box">
                     <label class="custom-checkbox">
                         <input type="checkbox" id="agreeCheck">
                         <span class="box"></span>
                         I confirm that I am the authorized holder of this NID.
                     </label>
+
+                    <!-- Proceed Button -->
                     <button id="startVoteBtn" class="btn-action" disabled>PROCEED TO BALLOT</button>
                 </div>
             </div>
         </section>
 
+        <!-- ================= BALLOT PAGE ================= -->
         <section id="page-ballot" class="hidden">
             <div class="glass-card wide">
+
+                <!-- Ballot Header -->
                 <div class="header-ballot">
                     <h3>Ballot Phase 1: Parliamentary Election</h3>
                     <p>Select one symbol to cast your candidate preference.</p>
                 </div>
                 
+                <!-- Candidate Symbol Grid -->
                 <div class="symbol-grid">
-                    <div class="symbol-card" onclick="selectSymbol(this, 'Nouka (নৌকা)')">
+
+                    <!-- Each symbol card represents a candidate -->
+                    <div class="symbol-card" onclick="selectSymbol(this, 'NOUKA (নৌকা)')">
                         <div class="symbol-img">⛵</div><span>Nouka</span>
                     </div>
-                    <div class="symbol-card" onclick="selectSymbol(this, 'Dhaner Sish (ধানের শীষ)')">
+
+                    <div class="symbol-card" onclick="selectSymbol(this, 'DHANER SISH (ধানের শীষ)')">
                         <div class="symbol-img">🌾</div><span>Dhaner Sish</span>
                     </div>
+
                     <div class="symbol-card" onclick="selectSymbol(this, 'Daripalla (দাড়িপাল্লা)')">
                         <div class="symbol-img">⚖️</div><span>Daripalla</span>
                     </div>
+
                     <div class="symbol-card" onclick="selectSymbol(this, 'Langol (লাঙ্গল)')">
                         <div class="symbol-img">🚜</div><span>Langol</span>
                     </div>
+
                     <div class="symbol-card" onclick="selectSymbol(this, 'Aam (আম)')">
                         <div class="symbol-img">🥭</div><span>Aam</span>
                     </div>
+
                     <div class="symbol-card" onclick="selectSymbol(this, 'Rickshaw (রিকশা)')">
                         <div class="symbol-img">🚲</div><span>Rickshaw</span>
                     </div>
+
                     <div class="symbol-card" onclick="selectSymbol(this, 'Shapla Koli (শাপলা কলি)')">
                         <div class="symbol-img">🪷</div><span>Shapla Koli</span>
                     </div>
+
                     <div class="symbol-card" onclick="selectSymbol(this, 'Football (ফুটবল)')">
                         <div class="symbol-img">⚽</div><span>Football</span>
                     </div>
+
                     <div class="symbol-card" onclick="selectSymbol(this, 'Horin (হরিন)')">
                         <div class="symbol-img">🦌</div><span>Horin</span>
                     </div>
+
                     <div class="symbol-card" onclick="selectSymbol(this, 'Lathi (লাঠি)')">
                         <div class="symbol-img">🦯</div><span>Lathi</span>
                     </div>
+
                     <div class="symbol-card" onclick="selectSymbol(this, 'Eagle (ইগল)')">
                         <div class="symbol-img">🦅</div><span>Eagle</span>
                     </div>
+
                     <div class="symbol-card" onclick="selectSymbol(this, 'Truck (ট্রাক)')">
                         <div class="symbol-img">🚚</div><span>Truck</span>
                     </div>
+
                     <div class="symbol-card" onclick="selectSymbol(this, 'Anarosh (আনারস)')">
                         <div class="symbol-img">🍍</div><span>Anarosh</span>
                     </div>
+
                     <div class="symbol-card" onclick="selectSymbol(this, 'Gorur Gari (গরুর গাড়ি)')">
                         <div class="symbol-img">🐂</div><span>Gorur Gari</span>
                     </div>
+
                 </div>
+
+                <!-- Continue Button -->
                 <button id="nextToRefBtn" class="btn-action hidden">CONTINUE TO REFERENDUM</button>
             </div>
         </section>
 
+        <!-- ================= REFERENDUM PAGE ================= -->
         <section id="page-referendum" class="hidden">
             <div class="glass-card">
+
+                <!-- Referendum Title -->
                 <h3>Ballot Phase 2: National Referendum</h3>
+
+                <!-- Question -->
                 <div class="ref-question">
                     <p>Do you support the proposed constitutional reform to strengthen the national governance system?</p>
                 </div>
+
+                <!-- Yes/No Buttons -->
                 <div class="ref-buttons">
                     <button class="choice-btn yes" onclick="castReferendum('YES')">YES (হ্যাঁ)</button>
                     <button class="choice-btn no" onclick="castReferendum('NO')">NO (না)</button>
@@ -153,16 +252,27 @@
             </div>
         </section>
 
+        <!-- ================= CONFIRMATION PAGE ================= -->
         <section id="page-confirm" class="hidden">
             <div class="glass-card wide">
+
+                <!-- Title -->
                 <h2>Cast Secure Vote</h2>
-                <div class="receipt-box">
-                    <div class="receipt-row"><span>Citizen Name:</span> <strong id="resName">---</strong></div>
-                    <div class="receipt-row"><span>Verified NID:</span> <strong id="resId">---</strong></div>
-                    <div class="receipt-row"><span>Candidate Choice:</span> <strong id="resSymbol">---</strong></div>
-                    <div class="receipt-row"><span>Referendum:</span> <strong id="resRef">---</strong></div>
-                </div>
+
+                <!-- Receipt Summary -->
+               <!-- Receipt Summary -->
+<div class="receipt-box">
+    <div class="receipt-row"><span>Citizen Name:</span> <strong id="resName">---</strong></div>
+    <div class="receipt-row"><span>Verified NID:</span> <strong id="resId">---</strong></div>
+    <div class="receipt-row"><span>Candidate Choice:</span> <strong id="resSymbol">---</strong></div>
+    <!-- Added ID 'receiptRefRow' so we can hide this for Chairman votes -->
+    <div class="receipt-row" id="receiptRefRow"><span>Referendum:</span> <strong id="resRef">---</strong></div>
+</div>
+
+                <!-- Warning -->
                 <p class="final-warning">Warning: This action is irreversible.</p>
+
+                <!-- Buttons -->
                 <div class="btn-group">
                     <button id="finalSubmitBtn" class="btn-success">CONFIRM & CAST VOTE</button>
                     <button class="btn-danger" onclick="location.reload()">CANCEL</button>
@@ -172,15 +282,24 @@
 
     </main>
 
+    <!-- ================= SUCCESS OVERLAY ================= -->
     <div id="successOverlay" class="overlay hidden">
         <div class="success-content">
+
+            <!-- Success Icon -->
             <div class="success-icon">✓</div>
+
+            <!-- Message -->
             <h2>Vote Cast Successfully</h2>
             <p>Your digital identity has been verified and your choices recorded.</p>
+
+            <!-- Exit Button -->
             <button onclick="location.reload()" class="btn-action">EXIT PORTAL</button>
         </div>
     </div>
 
+    <!-- External JavaScript -->
     <script src="script.js"></script>
+
 </body>
 </html>
