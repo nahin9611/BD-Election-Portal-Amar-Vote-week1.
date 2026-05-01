@@ -1,3 +1,4 @@
+/* --- PREMIUM NATIONAL DESIGN SYSTEM --- */
 :root {
     --primary-green: #006a4e; /* Bangladesh Flag Green */
     --national-red: #f42a41;  /* Bangladesh Flag Red */
@@ -25,6 +26,7 @@ body {
     background: url('https://images.unsplash.com/photo-1583258521509-2166a987d3e6?auto=format&fit=crop&q=80&w=2000') no-repeat center center fixed;
     background-size: cover;
 }
+
 /* --- THE BEAUTY: LEGACY BLUR OVERLAY --- */
 .legacy-blur-overlay {
     position: fixed;
@@ -57,7 +59,6 @@ body {
     from { opacity: 0; transform: translateY(30px); }
     to { opacity: 1; transform: translateY(0); }
 }
-
 
 /* --- LOGO & HEADER ALIGNMENT (FIXED) --- */
 .logo-container {
@@ -147,6 +148,7 @@ body {
     font-size: 40px;
     margin-bottom: 10px;
 }
+
 /* --- REFERENDUM YES/NO BUTTONS --- */
 .ref-buttons {
     display: flex;
@@ -256,4 +258,3 @@ input:focus {
         min-height: 300px;
     }
 }
-
