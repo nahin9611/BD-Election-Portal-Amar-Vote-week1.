@@ -1,63 +1,179 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Admin Control | National Results</title>
+    <title>Admin Control | Live Election Monitor</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
     <style>
-        body { font-family: 'Segoe UI', sans-serif; background: #f4f7f6; text-align: center; }
-        .dashboard { display: flex; justify-content: space-around; padding: 40px; }
-        .chart-box { background: white; padding: 20px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); width: 45%; min-height: 400px; }
-        h1 { color: #006a4e; margin-top: 40px; }
+        body { 
+            font-family: 'Segoe UI', sans-serif; 
+            background: #f4f7f6; 
+            text-align: center; 
+            margin: 0;
+            padding: 10px;
+            overflow-x: hidden;
+        }
+
+        h1 { color: #006a4e; margin-top: 20px; }
+
+        .controls {
+            margin: 20px auto;
+            background: white;
+            display: inline-block;
+            padding: 10px 20px;
+            border-radius: 50px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+
+        select {
+            padding: 8px 15px;
+            font-size: 15px;
+            border-radius: 20px;
+            border: 2px solid #006a4e;
+            color: #006a4e;
+            font-weight: bold;
+            outline: none;
+        }
+
+        /* Fixed the Dashboard Alignment */
+        .dashboard { 
+            display: flex; 
+            flex-direction: row; /* Force side-by-side */
+            justify-content: center; 
+            align-items: flex-start;
+            gap: 20px;
+            padding: 20px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .chart-box { 
+            background: white; 
+            padding: 20px; 
+            border-radius: 20px; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1); 
+            flex: 1; /* Equal width */
+            min-width: 300px;
+            height: 450px; /* Fixed height to prevent "jumping" */
+            position: relative;
+        }
+
+        /* Smoothly hide the referendum box */
+        #refBox {
+            transition: opacity 0.4s ease, transform 0.4s ease;
+        }
+
+        .hidden-visual {
+            opacity: 0;
+            transform: translateY(20px);
+            pointer-events: none;
+        }
     </style>
 </head>
+
 <body>
+
     <h1>📊 Live Election Monitor</h1>
+
+    <div class="controls">
+        <select id="electionType" onchange="initOrUpdate()">
+            <option value="national">🇧🇩 National Election</option>
+            <option value="chairman">🏘️ Chairman Election</option>
+        </select>
+    </div>
+
     <div class="dashboard">
         <div class="chart-box">
-            <h3>Candidate Symbols (Bar Chart)</h3>
-            <canvas id="symbolChart"></canvas>
+            <h3 id="barTitle">Candidate Symbols</h3>
+            <div style="height: 350px;">
+                <canvas id="symbolChart"></canvas>
+            </div>
         </div>
-        <div class="chart-box">
-            <h3>Referendum Status (Pie Chart)</h3>
-            <canvas id="refChart"></canvas>
+
+        <div class="chart-box" id="refBox">
+            <h3>Referendum Status</h3>
+            <div style="height: 350px;">
+                <canvas id="refChart"></canvas>
+            </div>
         </div>
     </div>
 
     <script>
-        let sChart = null, rChart = null;
+        let sChart = null;
+        let rChart = null;
 
-        async function loadResults() {
+        // Function to initialize charts or update them if they exist
+        async function loadData() {
+            const type = document.getElementById('electionType').value;
+            const refBox = document.getElementById('refBox');
+            
             try {
-                const response = await fetch('http://192.168.0.106:3000/api/admin/results');
-                const data = await response.json(); // This won't throw errors now
+                const response = await fetch(`/api/admin/results?type=${type}`);
+                const data = await response.json();
                 
                 if (data.success) {
-                    // Update Symbol Chart
-                    const sCtx = document.getElementById('symbolChart').getContext('2d');
-                    if (sChart) sChart.destroy();
-                    sChart = new Chart(sCtx, {
-                        type: 'bar',
-                        data: {
-                            labels: data.symbolCounts.map(i => i._id),
-                            datasets: [{ label: 'Votes', data: data.symbolCounts.map(i => i.count), backgroundColor: '#006a4e' }]
-                        }
-                    });
+                    const symbolLabels = data.symbolCounts.map(i => i._id);
+                    const symbolData = data.symbolCounts.map(i => i.count);
+                    const barColor = type === 'chairman' ? '#e67e22' : '#006a4e';
 
-                    // Update Referendum Chart
-                    const rCtx = document.getElementById('refChart').getContext('2d');
-                    if (rChart) rChart.destroy();
-                    rChart = new Chart(rCtx, {
-                        type: 'pie',
-                        data: {
-                            labels: data.referendumCounts.map(i => i._id),
-                            datasets: [{ data: data.referendumCounts.map(i => i.count), backgroundColor: ['#28a745', '#f42a41'] }]
+                    // Update Bar Chart
+                    if (!sChart) {
+                        const ctx = document.getElementById('symbolChart').getContext('2d');
+                        sChart = new Chart(ctx, {
+                            type: 'bar',
+                            data: {
+                                labels: symbolLabels,
+                                datasets: [{ label: 'Votes', data: symbolData, backgroundColor: barColor }]
+                            },
+                            options: { responsive: true, maintainAspectRatio: false }
+                        });
+                    } else {
+                        sChart.data.labels = symbolLabels;
+                        sChart.data.datasets[0].data = symbolData;
+                        sChart.data.datasets[0].backgroundColor = barColor;
+                        sChart.update('none'); // Update without laggy animations
+                    }
+
+                    // Handle Referendum Chart
+                    if (type === 'national') {
+                        refBox.classList.remove('hidden-visual');
+                        const refLabels = data.referendumCounts.map(i => i._id);
+                        const refData = data.referendumCounts.map(i => i.count);
+
+                        if (!rChart) {
+                            const ctxR = document.getElementById('refChart').getContext('2d');
+                            rChart = new Chart(ctxR, {
+                                type: 'pie',
+                                data: {
+                                    labels: refLabels,
+                                    datasets: [{ data: refData, backgroundColor: ['#28a745', '#f42a41'] }]
+                                },
+                                options: { responsive: true, maintainAspectRatio: false }
+                            });
+                        } else {
+                            rChart.data.labels = refLabels;
+                            rChart.data.datasets[0].data = refData;
+                            rChart.update('none');
                         }
-                    });
+                    } else {
+                        refBox.classList.add('hidden-visual');
+                    }
                 }
-            } catch (err) { console.error("Chart Error:", err); }
+            } catch (err) {
+                console.error("Fetch error:", err);
+            }
         }
-        setInterval(loadResults, 5000);
-        loadResults();
+
+        // Reset charts when switching election types to prevent data mixing
+        function initOrUpdate() {
+            if (sChart) { sChart.destroy(); sChart = null; }
+            if (rChart) { rChart.destroy(); rChart = null; }
+            loadData();
+        }
+
+        // Sync every 3 seconds
+        setInterval(loadData, 3000);
+        loadData();
     </script>
 </body>
 </html>
